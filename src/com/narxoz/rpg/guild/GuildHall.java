@@ -21,13 +21,16 @@ public class GuildHall implements GuildMediator {
     }
 
     @Override
-    public void dispatch(String topic, GuildMember from, String payload) {
+    public int dispatch(String topic, GuildMember from, String payload) {
         List<GuildMember> subscribers = subscribersFor(topic);
+        int notified = 0;
         for (GuildMember member : subscribers) {
             if (member != from) {
                 member.receive(topic, from, payload);
+                notified++;
             }
         }
+        return notified;
     }
 
     protected void addSubscriber(String topic, GuildMember member) {

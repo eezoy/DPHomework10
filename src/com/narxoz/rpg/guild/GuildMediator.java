@@ -7,5 +7,5 @@ public interface GuildMediator {
 
     void register(GuildMember member);
 
-    void dispatch(String topic, GuildMember from, String payload);
+    int dispatch(String topic, GuildMember from, String payload);
 }

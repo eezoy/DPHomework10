@@ -15,6 +15,7 @@ public class CouncilEngine {
 
         int questsTraversed = 0;
         int messagesRouted = 0;
+        int membersNotified = 0;
 
         System.out.println("\n[Iterator 1] Ordered traversal — planning all quests:");
         QuestIterator ordered = questLog.ordered();
@@ -22,7 +23,7 @@ public class CouncilEngine {
             Quest q = ordered.next();
             questsTraversed++;
             System.out.println("  Planning: " + q.getTitle());
-            hall.dispatch("orders", null, "Planning: " + q.getTitle());
+            membersNotified += hall.dispatch("orders", null, "Planning: " + q.getTitle());
             messagesRouted++;
         }
 
@@ -32,7 +33,7 @@ public class CouncilEngine {
             Quest q = priority.next();
             questsTraversed++;
             System.out.println("  Scouting for: " + q.getTitle());
-            hall.dispatch("scouting", null, "Scouting for: " + q.getTitle());
+            membersNotified += hall.dispatch("scouting", null, "Scouting for: " + q.getTitle());
             messagesRouted++;
         }
 
@@ -42,12 +43,12 @@ public class CouncilEngine {
             Quest q = reverse.next();
             questsTraversed++;
             System.out.println("  Supplies for: " + q.getTitle());
-            hall.dispatch("supplies", null, "Supplies for: " + q.getTitle());
+            membersNotified += hall.dispatch("supplies", null, "Supplies for: " + q.getTitle());
             messagesRouted++;
         }
 
         System.out.println("\n--- Council Engine: Done ---");
-        return new CouncilRunResult(questsTraversed, messagesRouted, party.size());
+        return new CouncilRunResult(questsTraversed, messagesRouted, membersNotified);
     }
 }
 

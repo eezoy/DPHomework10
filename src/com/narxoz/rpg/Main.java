@@ -1,23 +1,11 @@
 package com.narxoz.rpg;
 
 import com.narxoz.rpg.combatant.Hero;
-import com.narxoz.rpg.council.CouncilEngine;
-import com.narxoz.rpg.council.CouncilRunResult;
-import com.narxoz.rpg.guild.Captain;
-import com.narxoz.rpg.guild.GuildHall;
-import com.narxoz.rpg.guild.Healer;
-import com.narxoz.rpg.guild.Quartermaster;
-import com.narxoz.rpg.guild.Scout;
-import com.narxoz.rpg.quest.Quest;
-import com.narxoz.rpg.quest.QuestIterator;
-import com.narxoz.rpg.quest.QuestLog;
-import com.narxoz.rpg.quest.QuestPriority;
-import java.util.Arrays;
-import java.util.List;
+import com.narxoz.rpg.council.*;
+import com.narxoz.rpg.guild.*;
+import com.narxoz.rpg.quest.*;
+import java.util.*;
 
-/**
- * Entry point for Homework 10 — The Adventurers' Guild: Iterator + Mediator.
- */
 public class Main {
 
     public static void main(String[] args) {
@@ -84,6 +72,19 @@ public class Main {
         System.out.println("\n--- Running Council Engine ---");
         CouncilEngine engine = new CouncilEngine();
         CouncilRunResult result = engine.runCouncil(party, questLog, hall);
+
+        System.out.println("\n--- Part 4: RewardSortedQuestIterator ---");
+        QuestIterator rewardSorted = questLog.rewardSorted();
+        while (rewardSorted.hasNext()) {
+            Quest q = rewardSorted.next();
+            System.out.println("  [REWARD-SORTED] " + q.getTitle() + " | " + q.getRewardGold() + "g | " + q.getPriority());
+        }
+
+        System.out.println("\n--- Part 4: Loremaster ---");
+        Loremaster loremaster = new Loremaster("The Narrator", hall);
+        System.out.println("  Registered: " + loremaster.getName());
+        loremaster.shareKnowledge("lore", "The Cursed Forest was once the site of the First Necromancer's lair.");
+        loremaster.shareKnowledge("curse", "Dragon Sighting may be linked to the Seal of Morgoth — handle with care.");
 
         System.out.println("\n=== Council Run Complete ===");
         System.out.println("  Quests traversed : " + result.getQuestsTraversed());
