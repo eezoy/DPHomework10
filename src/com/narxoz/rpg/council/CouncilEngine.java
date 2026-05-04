@@ -2,18 +2,52 @@ package com.narxoz.rpg.council;
 
 import com.narxoz.rpg.combatant.Hero;
 import com.narxoz.rpg.guild.GuildMediator;
+import com.narxoz.rpg.quest.Quest;
+import com.narxoz.rpg.quest.QuestIterator;
 import com.narxoz.rpg.quest.QuestLog;
+import com.narxoz.rpg.quest.QuestPriority;
 import java.util.List;
 
-/**
- * Orchestrates a planning session that uses both Iterator and Mediator.
- */
 public class CouncilEngine {
 
     public CouncilRunResult runCouncil(List<Hero> party, QuestLog questLog, GuildMediator hall) {
-        // TODO: walk questLog with at least 2 different iterators,
-        //       dispatch coordinating messages through hall for each quest,
-        //       and return counters (questsTraversed, messagesRouted, membersNotified).
-        return new CouncilRunResult(0, 0, 0);
+        System.out.println("\n--- Council Engine: Full Run ---");
+
+        int questsTraversed = 0;
+        int messagesRouted = 0;
+
+        System.out.println("\n[Iterator 1] Ordered traversal — planning all quests:");
+        QuestIterator ordered = questLog.ordered();
+        while (ordered.hasNext()) {
+            Quest q = ordered.next();
+            questsTraversed++;
+            System.out.println("  Planning: " + q.getTitle());
+            hall.dispatch("orders", null, "Planning: " + q.getTitle());
+            messagesRouted++;
+        }
+
+        System.out.println("\n[Iterator 2] HIGH+ priority traversal — scouting:");
+        QuestIterator priority = questLog.priorityAtLeast(QuestPriority.HIGH);
+        while (priority.hasNext()) {
+            Quest q = priority.next();
+            questsTraversed++;
+            System.out.println("  Scouting for: " + q.getTitle());
+            hall.dispatch("scouting", null, "Scouting for: " + q.getTitle());
+            messagesRouted++;
+        }
+
+        System.out.println("\n[Iterator 3] Reverse traversal — supply run:");
+        QuestIterator reverse = questLog.reverse();
+        while (reverse.hasNext()) {
+            Quest q = reverse.next();
+            questsTraversed++;
+            System.out.println("  Supplies for: " + q.getTitle());
+            hall.dispatch("supplies", null, "Supplies for: " + q.getTitle());
+            messagesRouted++;
+        }
+
+        System.out.println("\n--- Council Engine: Done ---");
+        return new CouncilRunResult(questsTraversed, messagesRouted, party.size());
     }
 }
+
