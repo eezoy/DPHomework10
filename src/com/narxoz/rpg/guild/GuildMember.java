@@ -1,5 +1,7 @@
 package com.narxoz.rpg.guild;
 
+import java.util.List;
+
 /**
  * Base class for all guild officers that communicate through a mediator.
  */
@@ -21,6 +23,8 @@ public abstract class GuildMember {
     protected GuildMediator getMediator() {
         return mediator;
     }
+
+    public abstract List<String> getSubscribedTopics();
 
     public abstract void receive(String topic, GuildMember from, String payload);
 }
